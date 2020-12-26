@@ -1,0 +1,59 @@
+{% extends "layoutCME.html" %}
+{% block content%}
+<main>
+    <div class="container-fluid text-white">
+        <h1 class="mt-4">Eliminar productos</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item active">Seleccione la opción a eliminar o ingrese la referencia</li>
+        </ol>
+
+
+        <div class="card mb-4">
+            <div class="card-header text-dark">
+                <i class="fas fa-table mr-1"></i>
+                Productos en inventario
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Referencia</th>
+                                <th>Cantidad</th>
+                                <th>Nombre del producto</th>
+                                <th>Precio</th>
+                                <th>Categoria</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for producto in productos %}
+                            <tr>
+                                <td>{{producto.id}}</td>
+                                <td>{{producto.Cantidad}}</td>
+                                <td>{{producto.Nombre}}</td>
+                                <td>{{producto.Precio_Unidad}}</td>
+                                <td>{{producto.Categoria}}</td>
+                                <!-- <td><a href="" class="btn btn-dark">Modificar</a></td> -->
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Referencia</th>
+                                <th>Cantidad</th>
+                                <th>Nombre del producto</th>
+                                <th>Precio</th>
+                                <th>Categoria</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <form action="/productos/eliminar/del" method="POST">
+                    <input type="text" placeholder="Referencia del producto" id="ref" name='elim'>
+                    <input type="submit" value="Eliminar registro" class="btn btn-dark" onclick="eliminar()">
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

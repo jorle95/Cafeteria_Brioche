@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Cajero - Buscar</title>
+    <link href="{{ url_for('static',filename='css/styles.css') }}" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet"
+        crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"
+        crossorigin="anonymous"></script>
+
+</head>
+
+<body class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <a class="navbar-brand" href="{{url_for('inicio')}}">Cafetería Brioche</a>
+        <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i
+                class="fas fa-bars"></i></button>
+
+        <!-- Navbar-->
+        <ul class="navbar-nav ml-auto ml-md-6">
+            <li class="nav-item dropdown ">
+                <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+
+                    <a class="dropdown-item" href="{{url_for('login')}}">Logout</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                <div class="sb-sidenav-menu">
+                    <div class="nav">
+                        <div class="sb-sidenav-menu-heading">Seleccione su opción</div>
+                        <a class="nav-link" href="{{url_for('busqueda')}}">
+                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            Busqueda de productos
+                        </a>
+
+                        <a class="nav-link" href="{{url_for('caja')}}">
+                            <div class="sb-nav-link-icon"><i class="fas fa-money-bill-wave"></i></div>
+                            Registro de ventas
+                        </a>
+
+                    </div>
+                    <div class="sb-sidenav-footer fixed-bottom">
+                        <div class="small">Logged in as:</div>
+                        Cajero
+                    </div>
+            </nav>
+        </div>
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="row">
+                    <div class="col">
+                        <div class="container-fluid text-white">
+                            <h1 class="mt-4 text-center">Vender Productos</h1>
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item active">Ingrese la referencia</li>
+                            </ol>
+                            {% with messages = get_flashed_messages() %}
+                                {% if messages %}
+                                {% for message in messages %}
+                                <div class="alert alert-success alert-dismissable" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                                        <span aria-hidden="true">x</span>
+                                    </button>
+                                    {{message}}
+                                </div>
+                                {% endfor %}
+                                {% endif %}
+                                {% endwith %}
+                            <div class="card">
+                                <div class="card-header text-dark">
+                                    <i class="fas fa-table mr-1"></i>
+                                    Productos en inventario
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Referencia</th>
+                                                    <th>Cantidad</th>
+                                                    <th>Nombre del producto</th>
+                                                    <th>Precio</th>
+                                                    <th>Categoria</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for producto in productos %}
+                                                <tr>
+                                                    <td>{{producto.id}}</td>
+                                                    <td>{{producto.Cantidad}}</td>
+                                                    <td>{{producto.Nombre}}</td>
+                                                    <td>{{producto.Precio_Unidad}}</td>
+                                                    <td>{{producto.Categoria}}</td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <form action="/caja/agregar" method="POST">
+                                        <input type="number" placeholder="Referencia del producto" id="ref" min="1"
+                                            name='agregar' required>
+                                        <input type="number" placeholder="Cantidad" id="cantidad" name='cantidad'
+                                            min="1" required />
+                                        <input type="submit" value="Agregar registro" class="btn btn-primary">
+                                    </form>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="container-fluid text-white">
+                            <div class="card">
+                                <div class="card-header text-dark">
+                                    <i class="fas fa-table mr-1"></i>
+                                    Productos Seleccionados
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-condensed table-striped"
+                                            id="tablaListaProductos">
+                                            <thead style="font-weight: bold; color: black">
+                                                <tr>
+                                                    <th width="40%" style="text-align: left !important;">
+                                                        Productos
+                                                    </th>
+                                                    <th width="10%">
+                                                        Cant.
+                                                    </th>
+                                                    <th width="20%">
+                                                        Precio
+                                                    </th>
+                                                    <th width="20%">
+                                                        Subtotal
+                                                    </th>
+                                                    <th width="10%">
+                                                        Borrar
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for prodcarrito in prodscarrito %}
+                                                <tr>
+                                                    <td>{{prodcarrito.nombreProducto}}</td>
+
+                                                    <td><a href="/caja/modificarcant/{{prodcarrito.id}}"
+                                                            data-toggle="modal"
+                                                            data-target="#modaledit{{prodcarrito.id}}"
+                                                            class="btn btn-link">{{prodcarrito.cantidadProducto}}</a>
+                                                    </td>
+                                                    <td>{{prodcarrito.precioProducto}}</td>
+                                                    <td>{{prodcarrito.precioVenta}}</td>
+                                                    <td>
+                                                        <a href="/caja/eliminar/{{prodcarrito.id}}"
+                                                            class="btn btn-danger btn-xs">Eliminar</a>
+                                                    </td>
+                                                </tr>
+
+                                                <div id="modaledit{{prodcarrito.id}}" class="modal" role="dialog">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-body">
+                                                                <form action="/caja/modificarcant/{{prodcarrito.id}}"
+                                                                    method="POST">
+                                                                    <div class="form-group">
+                                                                        <label>Cantidad:</label>
+                                                                        <input type="hidden" name="id"
+                                                                            value="{{prodcarrito.id}}">
+                                                                        <input type="int" class="form-control"
+                                                                            name="cantidad"
+                                                                            value="{{prodcarrito.cantidadProducto}}">
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <button class="btn btn-primary"
+                                                                            type="submit">Actualizar</button>
+                                                                        <button type="button" class="btn btn-secondary"
+                                                                            data-dismiss="modal">Cancelar</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container-fluid text-white">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table" width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <td width="50%" class="tdtitulos"><b
+                                                            class="titulo_subtotales">SUBTOTAL</b></td>
+                                                    <td width="50%" class="tdsubtotales"><b
+                                                            class="titulo_subtotales"><span class="total_show_peso">$
+                                                            </span><span class="label label-info subtotales"
+                                                                id="subtotal"> {{subtotalcarrito}} </span></b></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="50%" class="tdtitulos"><b
+                                                            class="titulo_subtotales">IVA</b></td>
+                                                    <td width="50%" class="tdsubtotales"><b
+                                                            class="titulo_subtotales"><span class="total_show_peso">$
+                                                            </span><span class="label label-info subtotales"
+                                                                id="iva-total"> {{ivacarrito}}</span></b></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="50%" class="tdtitulos"><b class="titulo_subtotales"
+                                                            style="font-size: 12px !important;">TOTAL</b></td>
+                                                    <td width="50%" class="tdsubtotales"><b
+                                                            class="titulo_subtotales"><span class="total_show_peso"
+                                                                style="font-size: 20px !important; font-weight:600 !important; color:#505050 !important">$
+                                                            </span><span class="label label-info subtotales"
+                                                                id="total-show"
+                                                                style="font-size: 20px !important; font-weight:600; color:#505050 !important">
+                                                                {{totalcarrito}}</span></b>
+                                                    </td>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container-fluid text-white">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="text-center">
+                                        <a href="#modalcancelar" data-toggle="modal" data-target="#modalcancelar"
+                                            class="btn btn-danger">CANCELAR</a>
+                                        <a href="#modalpagar" data-toggle="modal" data-target="#modalpagar"
+                                            class="btn btn-primary">PAGAR</a>
+
+                                        <div id="modalcancelar" class="modal" tabindex="-1">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title text-primary">Confirmacion</h5>
+                                                        <button type="button" class="close"
+                                                            data-dismiss="modal">&times;</button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p class="text-primary"><small></small>Esta seguro de cancelar
+                                                            esta compra?</small></p>
+                                                        <p class="text-secondary"><small>Todos los productos seran
+                                                                removidos de la lista</small></p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Cancelar</button>
+                                                        <a href="{{url_for('caja_Limpiar')}}"
+                                                            class="btn btn-primary">Continuar</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="modalpagar" class="modal" tabindex="-1">
+                                            {% if totalcarrito != 0 %}
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title text-primary">Confirmacion</h5>
+                                                        <button type="button" class="close"
+                                                            data-dismiss="modal">&times;</button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p class="text-primary"><small></small>Pago Exitoso?</small></p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">NO</button>
+                                                        <a href="{{url_for('checkout')}}"
+                                                            class="btn btn-primary">Continuar</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% else %}
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title text-primary">Alerta</h5>
+                                                        <button type="button" class="close"
+                                                            data-dismiss="modal">&times;</button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p class="text-primary"><small></small>Adicione productos antes
+                                                            de pagar</small></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <footer class="py-4 bg-light mt-auto">
+                <div class="container-fluid">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div class="text-muted">Copyright &copy; Grupo F </div>
+                        <div>
+                            <a href="#">Privacy Policy</a>
+                            &middot;
+                            <a href="#">Terms &amp; Conditions</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+    <script src="{{url_for('static',filename='js/scripts.js')}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+    <script src="{{url_for('static',filename='assets/demo/chart-area-demo.js')}}"></script>
+    <script src="{{url_for('static',filename='assets/demo/chart-bar-demo.js')}}"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+    <script src="{{url_for('static',filename='assets/demo/datatables-demo.js')}}"></script>
+</body>
+
+</html>

@@ -1,0 +1,99 @@
+{% extends "layoutCME.html" %}
+{% block content%}
+
+<main>
+    <div class="container-fluid text-white">
+        <h1 class="mt-4">Inventario de productos</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item active">Ingrese los datos de cada producto, junto con su imagen en un formato valido. Para modificar o eliminar seleccione los botones acompañados a los productos.    (Si no se ingresa una referencia, esta sera asignada de manera automatica).</li>
+        </ol>
+        <div class="card-body ">
+            <form action="/productos/crear/agregar" enctype="multipart/form-data" method="POST">
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label>Referencia</label>
+                        <input type="text" class="form-control" placeholder="Id del producto" name="referencia">
+                    </div>
+                    <div class="form-group col-md-9">
+                        <label>Nombre del producto</label>
+                        <input type="text" class="form-control" placeholder="Nombre" name="Nombre" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Precio</label>
+                        <input type="number" class="form-control" placeholder="Precio $$" name="Precio" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="inputState">Categoria</label>
+                        <select id="inputState" class="form-control" name="Categoria">
+                            <option>Panaderia</option>
+                            <option>Pasteleria</option>
+                            <option>Bebidas</option>
+                            <option>Desayunos</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Cantidad</label>
+                        <input type="number" class="form-control" placeholder="Cantidad" name="Cantidad" required>
+                    </div>
+                    <div>
+                        <label class="">Ingrese la imagen</label><br>
+                        <input type="file" name="pic" />
+                    </div>
+
+                    <input type="submit" id="reg" class="btn btn-primary btn btn-outline-dark btn-lg btn-block "
+                        value="REGISTRAR PRODUCTO">
+            </form>
+        </div>
+        <div class="m-9" id="tabla"><p></p></div>
+        <div class="card mb-4">
+            <div class="card-header text-dark">
+                <i class="fas fa-table mr-1"></i>
+                Productos en inventario
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Referencia</th>
+                                <th>Cantidad</th>
+                                <th>Nombre del producto</th>
+                                <th>Precio</th>
+                                <th>Categoria</th>
+                                <th>Imagen</th>
+                                <th>Modificar</th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for producto in productos %}
+                            <tr>
+                                <td>{{producto.id}}</td>
+                                <td>{{producto.Cantidad}}</td>
+                                <td>{{producto.Nombre}}</td>
+                                <td>$ {{producto.Precio_Unidad}}</td>
+                                <td>{{producto.Categoria}}</td>
+                                <td><a href="/productos/crear/{{producto.id}}">{{producto.name}}</a></td>
+                                <td><a href="/productos/modificar/{{producto.id}}" class="btn btn-dark">Modificar</a></td>
+                                <td><a href="/productos/eliminar/{{producto.id}}" class="btn btn-dark">Eliminar</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Referencia</th>
+                                <th>Cantidad</th>
+                                <th>Nombre del producto</th>
+                                <th>Precio</th>
+                                <th>Categoria</th>
+                                <th>Imagen</th>
+                                <th>Modificar</th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+</main>
+{% endblock %}

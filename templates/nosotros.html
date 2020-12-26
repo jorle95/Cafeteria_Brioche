@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cafeteria Brioche</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/estilos2.css') }}">
+    <link href="https://file.myfontastic.com/m5SoCGqxkgeJSnFUS8oQTj/icons.css" rel="stylesheet">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container container--flex">
+            <div class="logo-container column column--50">
+                 <h1 class="logo">Cafeteria Brioche
+                    <span class="icon-coffee"></span>
+                 </h1> 
+            </div>
+            <div class="main-header__contactInfo column column--50">
+                <p class="main-header__contactInfo__phone">
+                    <span class="icon-phone">Telefono: 999-888-777</span>
+                </p>
+            </div>
+            <p class="main-header__contactInfo__address">
+                <span class="icon-locacion">Direccion: Av 678</span>
+
+            </p>
+            </div>
+    </header>
+    <nav class="main-nav">
+        <div class="container container--flex">
+            
+            <ul class="menu" id="menu">
+                <li class="menu__item"><a href="{{url_for('inicio')}}" class="menu__link ">Inicio</a></li>
+                <li class="menu__item"><a href="{{url_for('nosotros')}}" class="menu__link menu__link--select">Nosotros</a></li>
+                <li class="menu__item"><a href="{{url_for('login')}}" class="menu__link">Login</a></li>
+                
+            <div class="social-icon">
+                <a href="" class="social-icon__link"><span class="icon-facebook"></span></a>
+                <a href="" class="social-icon__link"><span class="icon-twitter"></span></a>
+                <a href="" class="social-icon__link"><span class="icon-mail"></span></a>
+            </div> 
+        </div>
+    </nav>
+    <section class="banner">
+        <img src="{{ url_for('static',filename='Imagenes/cafe22.jpg')}}" alt="" class="banner__img">
+        <div class="banner__content">¡Hola! Somos la Cafeteria Brioche!</div>
+
+        <div class="banner__content3">Actualmente somos una empresa que lleva 5 años en el mercado, la idea de cafeteria Brioche surgio a partir del amor que le tenemos como familia a las cafeterias y de brindarle a la gente una experiencia satisfactoria a la hora de recibir un producto</div>
+    </section>
+    <main class="main">
+        <section class="group group--color">
+           
+          
+            </div>
+        </section>
+
+    <footer class="main-footer">
+        <div class="container container--flex">
+            <div class="column column-33">
+               <h2 class="column__title">¿Por qué visitarnos?</h2>
+               <p class="column__txt"> Somos una cafeteria que hace todo con mucho amor, siempre recibiras productos de primera calidad</p> 
+            </div>
+            <div class="column column-33">
+                <h2 class="column__title">Contactanos</h2>
+                <p class="column__txt">Direccion: Av 678</p> 
+                <p class="column__txt">Telefono: 999-888-777</p> 
+                <p class="column__txt">consultas@cafeteria.com</p> 
+            </div>
+            <div class="column column-33">
+                <h2 class="column__title">Siguenos en nuestras redes</h2>
+                <p class="column__txt"><a href="" class="icon-facebook">Facebook</a></p> 
+                <p class="column__txt"><a href="" class="icon-twitter">Siguenos en twitter</a></p> 
+                <p class="column__txt"><a href="" class="icon-instagram">Siguenos en instagram</a></p> 
+            </div>
+            <div class="column column-33">
+                <p class="column__txt">Copyright © Todos los derechos reservados</p> 
+            </div>
+        </div>
+    </footer>
+    </main>
+    
+</body>
+</html>
